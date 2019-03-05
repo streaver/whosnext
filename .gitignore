@@ -1,0 +1,8 @@
+# Ignore all logfiles and temp files
+/node_modules
+/*.log
+/dist
+/dist-zip
+
+# mac os files
+.DS_Store
