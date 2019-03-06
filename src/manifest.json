@@ -16,8 +16,21 @@
       "background.js"
     ]
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.meet.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
   "options_ui": {
     "page": "options/options.html",
     "chrome_style": true
-  }
+  },
+  "permissions": [
+    "tabs"
+  ]
 }
