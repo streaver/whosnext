@@ -8,8 +8,19 @@ function isMeetTab(tab) {
   return false;
 }
 
+function updatePopup(participants) {
+  chrome.runtime.sendMessage({
+    text: 'update_participants',
+    data: {
+      participants,
+    },
+  });
+}
+
 function infoFromDom(participants) {
   console.info(`Participants in meeting:\n ${participants}`);
+
+  updatePopup(participants);
 }
 
 function updateParticipants(tabId) {
