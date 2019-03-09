@@ -9,7 +9,7 @@
             v-bind:key="participant.details.sortKey"
             class="speaker-card speaker-card--spoke"
           >
-            {{ participant.details.sortKey }}
+            {{ participant.details.sortKey | prettifyParticipantName }}
           </div>
 
           <span>Next...</span>
@@ -19,7 +19,7 @@
             v-bind:class="{ 'speaker-card--active': index === 0 }"
             class="speaker-card"
           >
-            {{ participant.details.sortKey }}
+            {{ participant.details.sortKey | prettifyParticipantName }}
           </div>
         </div>
       </div>
@@ -72,6 +72,12 @@ export default {
         return a.position - b.position
       });
     },
+  },
+
+   filters: {
+    prettifyParticipantName: function (name) {
+      return name.replace(/ spaces.*/, '');
+    }
   },
 
   mounted() {
