@@ -1,5 +1,5 @@
 import database from './database';
-import { GET_USER_DATA } from './constants';
+import { GET_USER_DATA, WHOSNEXT_LS_MEETING_ID_KEY } from './constants';
 
 const GOOGLE_MEET_HOST = 'meet.google.com';
 const ACTIVE_CALL_TABS = [];
@@ -60,6 +60,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, _, tab) => {
   if (isCallTab(tab.status, url.host, GOOGLE_MEET_HOST)) {
     const meetingId = url.pathname.replace('/', '');
 
+    window.localStorage.setItem(`${WHOSNEXT_LS_MEETING_ID_KEY}`, meetingId);
+
     if (!ACTIVE_CALL_TABS.includes(tabId)) {
       ACTIVE_CALL_TABS.push(tabId);
       ACTIVE_CALL_TABS_MAPPING[tabId] = tab;
@@ -82,6 +84,9 @@ chrome.tabs.onRemoved.addListener(async tabId => {
     const tab = ACTIVE_CALL_TABS_MAPPING[tabId];
     const url = new URL(tab.url);
     const meetingId = url.pathname.replace('/', '');
+
+    window.localStorage.removeItem(`${WHOSNEXT_LS_MEETING_ID_KEY}`);
+
     const userData = await getUserData(tabId, { useCache: true });
 
     unregisterUser(userData, meetingId);
