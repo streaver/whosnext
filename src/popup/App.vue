@@ -5,10 +5,22 @@
       <div class="container rounded-border-10">
         <div id="participants">
           <div
-            v-for="participant in participants"
+            v-for="participant in participantsHadSpoken"
             v-bind:key="participant.details.sortKey"
+            class="speaker-card speaker-card--spoke"
+          >
+            {{ participant.details.sortKey }}
+          </div>
+
+          <span>Next...</span>
+          <div
+            v-for="(participant, index) in participantsToSpeak"
+            v-bind:key="participant.details.sortKey"
+            v-bind:class="{ 'speaker-card--active': index === 0 }"
             class="speaker-card"
-            v-bind:class="{ 'speaker-card--spoke': participant.position > current, 'speaker-card--active': participant.position === current }">{{ participant.details.sortKey }}</div>
+          >
+            {{ participant.details.sortKey }}
+          </div>
         </div>
       </div>
     </div>
@@ -43,6 +55,22 @@ export default {
   computed: {
     callIsInProgress() {
       return this.participants.length > 0;
+    },
+
+    participantsHadSpoken() {
+      return this.participants.filter(
+        participant => participant.hasSpoken
+      ).sort((a, b) => {
+        return a.position - b.position
+      });
+    },
+
+    participantsToSpeak() {
+      return this.participants.filter(
+        participant => !participant.hasSpoken
+      ).sort((a, b) => {
+        return a.position - b.position
+      });
     },
   },
 
