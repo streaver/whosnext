@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.3.4",
+    "dotenv-webpack": "^1.7.0",
     "firebase": "^5.8.6",
     "vue": "^2.5.17",
     "webextension-polyfill": "^0.4.0"
