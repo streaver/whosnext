@@ -4,6 +4,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
 const { VueLoaderPlugin } = require('vue-loader');
 const { version } = require('./package.json');
@@ -95,6 +96,9 @@ const config = {
     ]),
     new WebpackShellPlugin({
       onBuildEnd: ['node scripts/remove-evals.js'],
+    }),
+    new Dotenv({
+      safe: true,
     }),
   ],
 };

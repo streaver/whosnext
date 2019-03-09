@@ -1,76 +1,96 @@
-const meetURLRegex = /^https?:\/\/meet.google.com\/\w+-\w+-\w+/;
-const activeMeetTabIds = [];
+import database from './database';
+import { GET_USER_DATA, WHOSNEXT_LS_MEETING_ID_KEY } from './constants';
 
-function isMeetTab(tab) {
-  if (meetURLRegex.test(tab.url) && tab.status === 'complete') {
-    return true;
-  }
+const GOOGLE_MEET_HOST = 'meet.google.com';
+const ACTIVE_CALL_TABS = [];
+const ACTIVE_CALL_TABS_MAPPING = {};
+const USER_DATA_CACHE = {};
 
-  return false;
+function isCallTab(status, host, serviceHost) {
+  return host === serviceHost && status === 'complete';
 }
 
-// function updatePopup(participants) {
-//   chrome.runtime.sendMessage({
-//     text: 'update_participants',
-//     data: {
-//       participants,
-//     },
-//   });
-// }
-
-function infoFromDom(name) {
-  console.info(`Participants in meeting:\n ${name}`);
-
-  let currentParticipants = localStorage.getItem('whosnext-participants');
-
-  if (currentParticipants) {
-    if (currentParticipants.indexOf(name) === -1) {
-      currentParticipants.push({
-        name,
-        position: currentParticipants.length,
-      });
-    }
-  } else {
-    currentParticipants = [
-      {
-        name,
-        position: 1,
-      },
-    ];
+async function getUserData(tabId, options = { useCache: false }) {
+  if (options.useCache) {
+    return USER_DATA_CACHE[tabId];
   }
 
-  console.log(`STORING PARTICIPANTS: ${JSON.stringify(currentParticipants)}`);
-  localStorage.setItem('whosnext-participants', JSON.stringify(currentParticipants));
-  // updatePopup(participants);
-}
-
-function updateParticipants(tabId) {
-  chrome.tabs.sendMessage(tabId, { text: 'check_if_on_call' }, res => {
-    console.info(`2. Checking if I'm on call result: ${JSON.stringify(res)}`);
-
-    if (res.onCall === true && activeMeetTabIds.indexOf(tabId) === -1) {
-      activeMeetTabIds.push(tabId);
-      console.info('3. > Register me on call...');
-      chrome.tabs.sendMessage(tabId, { text: 'update_participants' }, infoFromDom);
-    }
+  return new Promise(resolve => {
+    chrome.tabs.sendMessage(tabId, { action: GET_USER_DATA }, userData => {
+      resolve(userData);
+    });
   });
 }
 
-chrome.tabs.onUpdated.addListener((tabId, _, tab) => {
-  console.info('1. Tabs are being updated...');
+function buildParticipantRef(meetingId, userData) {
+  const userKey = userData.sortKey
+    .replace(userData.participantId, '')
+    .trim()
+    .replace(/\s/g, '-')
+    .toLowerCase();
 
-  if (isMeetTab(tab)) {
-    updateParticipants(tabId);
+  return database
+    .collection('meetings')
+    .doc(meetingId)
+    .collection('participants')
+    .doc(userKey);
+}
+
+async function registerUser(userData, meetingId) {
+  const position = parseInt(Math.random() * 1000000, 0);
+  const participantRef = buildParticipantRef(meetingId, userData);
+  const participantDoc = await participantRef.get();
+
+  if (participantDoc.exists) {
+    return participantRef.set({ ...userData }, { merge: true });
   }
 
-  console.info('4. Reached the end of tabs Update!');
+  return participantRef.set({ ...userData, hasSpoken: false, position });
+}
+
+async function unregisterUser(userData, meetingId) {
+  const participantRef = buildParticipantRef(meetingId, userData);
+
+  return participantRef.delete();
+}
+
+chrome.tabs.onUpdated.addListener(async (tabId, _, tab) => {
+  const url = new URL(tab.url);
+
+  if (isCallTab(tab.status, url.host, GOOGLE_MEET_HOST)) {
+    const meetingId = url.pathname.replace('/', '');
+
+    window.localStorage.setItem(`${WHOSNEXT_LS_MEETING_ID_KEY}`, meetingId);
+
+    if (!ACTIVE_CALL_TABS.includes(tabId)) {
+      ACTIVE_CALL_TABS.push(tabId);
+      ACTIVE_CALL_TABS_MAPPING[tabId] = tab;
+    }
+
+    const userData = await getUserData(tabId);
+
+    if (userData) {
+      USER_DATA_CACHE[tabId] = userData;
+
+      await registerUser(userData, meetingId);
+    }
+  }
 });
 
-chrome.tabs.onRemoved.addListener(tabId => {
-  const tabPosition = activeMeetTabIds.indexOf(tabId);
+chrome.tabs.onRemoved.addListener(async tabId => {
+  const tabPosition = ACTIVE_CALL_TABS.indexOf(tabId);
 
   if (tabPosition !== -1) {
-    activeMeetTabIds.splice(tabPosition, 1);
-    localStorage.removeItem('whosnext-participants');
+    const tab = ACTIVE_CALL_TABS_MAPPING[tabId];
+    const url = new URL(tab.url);
+    const meetingId = url.pathname.replace('/', '');
+
+    window.localStorage.removeItem(`${WHOSNEXT_LS_MEETING_ID_KEY}`);
+
+    const userData = await getUserData(tabId, { useCache: true });
+
+    unregisterUser(userData, meetingId);
+
+    ACTIVE_CALL_TABS.splice(tabPosition, 1);
   }
 });

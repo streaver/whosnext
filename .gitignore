@@ -6,3 +6,6 @@
 
 # mac os files
 .DS_Store
+
+# Ignore environment files
+.env
