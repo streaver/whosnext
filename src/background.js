@@ -1,6 +1,4 @@
-import Meeting from './database/meeting';
-import Participant from './database/participant';
-
+import { registerUser, unregisterUser } from './services/registration';
 import { GET_USER_DATA, WHOSNEXT_LS_MEETING_ID_KEY } from './constants';
 
 const GOOGLE_MEET_HOST = 'meet.google.com';
@@ -22,19 +20,6 @@ async function getUserData(tabId, options = { useCache: false }) {
       resolve(userData);
     });
   });
-}
-
-async function registerUser(url, details) {
-  const meeting = await Meeting.fromUrl(url).findOrCreate();
-
-  return Participant.fromDetails(meeting, details).findOrCreate();
-}
-
-async function unregisterUser(url, details) {
-  const meeting = await Meeting.fromUrl(url).findOrCreate();
-  const participant = await Participant.fromDetails(meeting, details).findOrCreate();
-
-  return participant.delete();
 }
 
 chrome.tabs.onUpdated.addListener(async (tabId, _, tab) => {
