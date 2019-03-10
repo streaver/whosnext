@@ -1,6 +1,6 @@
-import { contentMessageActionSender, GET_USER_DETAILS_ACTION_NAME } from './services/content-background-communication';
-import { WHOSNEXT_LS_MEETING_ID_KEY } from './constants';
-import { registerUser, unregisterUser } from './services/registration';
+import RegistrationService from './services/registration';
+import BackgroundPopupCommunicationService from './services/background-popup-communication';
+import ContentBackgroundCommunicationService from './services/content-background-communication';
 
 const GOOGLE_MEET_HOST = 'meet.google.com';
 const ACTIVE_CALL_TABS = [];
@@ -16,7 +16,7 @@ async function getUserData(tabId, options = { useCache: false }) {
     return USER_DATA_CACHE[tabId];
   }
 
-  return contentMessageActionSender(tabId, GET_USER_DETAILS_ACTION_NAME);
+  return ContentBackgroundCommunicationService.sendAction(tabId, ContentBackgroundCommunicationService.GET_USER_DETAILS_ACTION_NAME);
 }
 
 chrome.tabs.onUpdated.addListener(async (tabId, _, tab) => {
@@ -25,7 +25,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, _, tab) => {
   if (isCallTab(tab.status, url.host, GOOGLE_MEET_HOST)) {
     const meetingId = url.pathname.replace('/', '');
 
-    window.localStorage.setItem(`${WHOSNEXT_LS_MEETING_ID_KEY}`, meetingId);
+    BackgroundPopupCommunicationService.setMeetingId(meetingId);
 
     if (!ACTIVE_CALL_TABS.includes(tabId)) {
       ACTIVE_CALL_TABS.push(tabId);
@@ -37,7 +37,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, _, tab) => {
     if (details) {
       USER_DATA_CACHE[tabId] = details;
 
-      await registerUser(tab.url, details);
+      await RegistrationService.registerUser(tab.url, details);
     }
   }
 });
@@ -48,11 +48,11 @@ chrome.tabs.onRemoved.addListener(async tabId => {
   if (tabPosition !== -1) {
     const tab = ACTIVE_CALL_TABS_MAPPING[tabId];
 
-    window.localStorage.removeItem(`${WHOSNEXT_LS_MEETING_ID_KEY}`);
+    BackgroundPopupCommunicationService.removeMeetingId();
 
     const details = await getUserData(tabId, { useCache: true });
 
-    unregisterUser(tab.url, details);
+    RegistrationService.unregisterUser(tab.url, details);
 
     ACTIVE_CALL_TABS.splice(tabPosition, 1);
   }

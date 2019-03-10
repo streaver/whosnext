@@ -30,7 +30,7 @@
 <script>
 import database from '../database/index';
 
-import { WHOSNEXT_LS_MEETING_ID_KEY } from '../constants';
+import BackgroundPopupCommunicationService from '../services/background-popup-communication';
 
 export default {
   data() {
@@ -47,7 +47,7 @@ export default {
   },
 
   mounted() {
-    const meetingId = localStorage.getItem(WHOSNEXT_LS_MEETING_ID_KEY);
+    const meetingId = BackgroundPopupCommunicationService.getMeetingId();
 
     database
       .collection('meetings')

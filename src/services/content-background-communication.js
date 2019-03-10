@@ -9,16 +9,16 @@ const CONTENT_ACTIONS = {
   [GET_USER_DETAILS_ACTION_NAME]: GET_USER_DETAILS_ACTION,
 };
 
-async function contentMessageHandler(message, sender, sendResponse) {
+async function handleAction(message, sender, sendResponse) {
   const actionResponse = CONTENT_ACTIONS[message.action](document);
 
   return sendResponse(actionResponse);
 }
 
-async function contentMessageActionSender(tabId, action) {
+async function sendAction(tabId, action) {
   return new Promise(resolve => {
-    chrome.tabs.sendMessage(tabId, { action }, resolve);
+    chrome.tabs.sendMessage(tabId, { action }, response => resolve(response));
   });
 }
 
-export { contentMessageHandler, contentMessageActionSender, GET_USER_DETAILS_ACTION_NAME };
+export default { handleAction, sendAction, GET_USER_DETAILS_ACTION_NAME };

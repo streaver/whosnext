@@ -14,4 +14,4 @@ async function unregisterUser(url, details) {
   return participant.delete();
 }
 
-export { registerUser, unregisterUser };
+export default { registerUser, unregisterUser };
