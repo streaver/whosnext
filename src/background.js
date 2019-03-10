@@ -1,5 +1,6 @@
+import { contentMessageActionSender, GET_USER_DETAILS_ACTION_NAME } from './services/content-background-communication';
+import { WHOSNEXT_LS_MEETING_ID_KEY } from './constants';
 import { registerUser, unregisterUser } from './services/registration';
-import { GET_USER_DATA, WHOSNEXT_LS_MEETING_ID_KEY } from './constants';
 
 const GOOGLE_MEET_HOST = 'meet.google.com';
 const ACTIVE_CALL_TABS = [];
@@ -15,11 +16,7 @@ async function getUserData(tabId, options = { useCache: false }) {
     return USER_DATA_CACHE[tabId];
   }
 
-  return new Promise(resolve => {
-    chrome.tabs.sendMessage(tabId, { action: GET_USER_DATA }, userData => {
-      resolve(userData);
-    });
-  });
+  return contentMessageActionSender(tabId, GET_USER_DETAILS_ACTION_NAME);
 }
 
 chrome.tabs.onUpdated.addListener(async (tabId, _, tab) => {
