@@ -1,4 +1,6 @@
-import database from './database';
+import Meeting from './database/meeting';
+import Participant from './database/participant';
+
 import { GET_USER_DATA, WHOSNEXT_LS_MEETING_ID_KEY } from './constants';
 
 const GOOGLE_MEET_HOST = 'meet.google.com';
@@ -22,36 +24,17 @@ async function getUserData(tabId, options = { useCache: false }) {
   });
 }
 
-function buildParticipantRef(meetingId, userData) {
-  const userKey = userData.sortKey
-    .replace(userData.participantId, '')
-    .trim()
-    .replace(/\s/g, '-')
-    .toLowerCase();
+async function registerUser(url, details) {
+  const meeting = await Meeting.fromUrl(url).findOrCreate();
 
-  return database
-    .collection('meetings')
-    .doc(meetingId)
-    .collection('participants')
-    .doc(userKey);
+  return Participant.fromDetails(meeting, details).findOrCreate();
 }
 
-async function registerUser(userData, meetingId) {
-  const position = parseInt(Math.random() * 1000000, 0);
-  const participantRef = buildParticipantRef(meetingId, userData);
-  const participantDoc = await participantRef.get();
+async function unregisterUser(url, details) {
+  const meeting = await Meeting.fromUrl(url).findOrCreate();
+  const participant = await Participant.fromDetails(meeting, details).findOrCreate();
 
-  if (participantDoc.exists) {
-    return participantRef.set({ ...userData }, { merge: true });
-  }
-
-  return participantRef.set({ ...userData, hasSpoken: false, position });
-}
-
-async function unregisterUser(userData, meetingId) {
-  const participantRef = buildParticipantRef(meetingId, userData);
-
-  return participantRef.delete();
+  return participant.delete();
 }
 
 chrome.tabs.onUpdated.addListener(async (tabId, _, tab) => {
@@ -67,12 +50,12 @@ chrome.tabs.onUpdated.addListener(async (tabId, _, tab) => {
       ACTIVE_CALL_TABS_MAPPING[tabId] = tab;
     }
 
-    const userData = await getUserData(tabId);
+    const details = await getUserData(tabId);
 
-    if (userData) {
-      USER_DATA_CACHE[tabId] = userData;
+    if (details) {
+      USER_DATA_CACHE[tabId] = details;
 
-      await registerUser(userData, meetingId);
+      await registerUser(tab.url, details);
     }
   }
 });
@@ -82,14 +65,12 @@ chrome.tabs.onRemoved.addListener(async tabId => {
 
   if (tabPosition !== -1) {
     const tab = ACTIVE_CALL_TABS_MAPPING[tabId];
-    const url = new URL(tab.url);
-    const meetingId = url.pathname.replace('/', '');
 
     window.localStorage.removeItem(`${WHOSNEXT_LS_MEETING_ID_KEY}`);
 
-    const userData = await getUserData(tabId, { useCache: true });
+    const details = await getUserData(tabId, { useCache: true });
 
-    unregisterUser(userData, meetingId);
+    unregisterUser(tab.url, details);
 
     ACTIVE_CALL_TABS.splice(tabPosition, 1);
   }

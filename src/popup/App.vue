@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import database from '../database';
+import database from '../database/index';
 
 import { WHOSNEXT_LS_MEETING_ID_KEY } from '../constants';
 
