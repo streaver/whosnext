@@ -6,9 +6,9 @@
         <div id="participants">
           <div
             v-for="participant in participants"
-            v-bind:key="participant.sortKey"
+            v-bind:key="participant.details.sortKey"
             class="speaker-card"
-            v-bind:class="{ 'speaker-card--spoke': participant.position > current, 'speaker-card--active': participant.position === current }">{{ participant.sortKey }}</div>
+            v-bind:class="{ 'speaker-card--spoke': participant.position > current, 'speaker-card--active': participant.position === current }">{{ participant.details.sortKey }}</div>
         </div>
       </div>
     </div>
