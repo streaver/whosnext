@@ -1,8 +1,13 @@
 <template>
   <div class="extension">
+    <div v-if="loading" class="loading-overlay">
+      <h1 class="header white-color centered">Stay tight...</h1>
+      <div class="loader white-color">Loading...</div>
+      <h2 class="white-color centered font-light">looking for meet calls...</h2>
+    </div>
     <div v-if="callIsInProgress" class="particles-bg">
       <div class="header-container">
-        <h1 class="header header--medium">👩‍💻 Currently on call 👨‍💻</h1>
+        <h1 class="header header--medium white-color">👩‍💻 Currently on call 👨‍💻</h1>
       </div>
       <div class="container rounded-border-3">
         <div id="participants">
@@ -28,7 +33,7 @@
       </div>
     </div>
     <div v-else>
-      <h1 class="header header--medium">No Meet call in progress yet...</h1>
+      <h1 class="header header--medium white-color">No Meet call in progress yet...</h1>
 
       <a class="meet-link centered rounded-border-50 link--no-decoration" href="https://meet.google.com/" target="_blank">Start Call</a>
     </div>
@@ -50,6 +55,7 @@ export default {
   data() {
     return {
       current: 0,
+      loading: true,
       participants: [],
     };
   },
@@ -82,15 +88,20 @@ export default {
     }
   },
 
-  mounted() {
+  created() {
     const meetingId = BackgroundPopupCommunicationService.getMeetingId();
 
+    this.loading = true;
     database
       .collection('meetings')
       .doc(meetingId)
       .collection('participants')
       .onSnapshot(collection => {
         this.participants = collection.docs.map(participantDoc => participantDoc.data());
+
+        setTimeout(() => {
+          this.loading = false;
+        }, 4000);
       });
   },
 };
@@ -137,7 +148,6 @@ export default {
     padding-top: 20px;
     font-weight: 400;
     text-align: center;
-    color: white;
   }
 
   .header--medium {
@@ -222,5 +232,80 @@ export default {
     position: absolute;
     bottom: 5px;
     right: 5px;
+  }
+
+  .white-color {
+    color: #FFF;
+  }
+
+  .font-light {
+    font-weight: 200;
+  }
+
+  .loading-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(45deg, #25A5C8 0%, #39B54A 65%);
+    z-index: 999999;
+  }
+
+  .loader,
+  .loader:before,
+  .loader:after {
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation: load7 1.8s infinite ease-in-out;
+    animation: load7 1.8s infinite ease-in-out;
+  }
+  .loader {
+    font-size: 10px;
+    margin: 60px auto 90px;
+    position: relative;
+    text-indent: -9999em;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+  }
+  .loader:before,
+  .loader:after {
+    content: '';
+    position: absolute;
+    top: 0;
+  }
+  .loader:before {
+    left: -3.5em;
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+  }
+  .loader:after {
+    left: 3.5em;
+  }
+  @-webkit-keyframes load7 {
+    0%,
+    80%,
+    100% {
+      box-shadow: 0 2.5em 0 -1.3em;
+    }
+    40% {
+      box-shadow: 0 2.5em 0 0;
+    }
+  }
+  @keyframes load7 {
+    0%,
+    80%,
+    100% {
+      box-shadow: 0 2.5em 0 -1.3em;
+    }
+    40% {
+      box-shadow: 0 2.5em 0 0;
+    }
   }
 </style>
