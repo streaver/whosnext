@@ -6,9 +6,9 @@
         <div id="participants">
           <div
             v-for="participant in participants"
-            v-bind:key="participant.sortKey"
+            v-bind:key="participant.details.sortKey"
             class="speaker-card"
-            v-bind:class="{ 'speaker-card--spoke': participant.position > current, 'speaker-card--active': participant.position === current }">{{ participant.sortKey }}</div>
+            v-bind:class="{ 'speaker-card--spoke': participant.position > current, 'speaker-card--active': participant.position === current }">{{ participant.details.sortKey }}</div>
         </div>
       </div>
     </div>
@@ -28,9 +28,9 @@
 </template>
 
 <script>
-import database from '../database';
+import database from '../database/index';
 
-import { WHOSNEXT_LS_MEETING_ID_KEY } from '../constants';
+import BackgroundPopupCommunicationService from '../services/background-popup-communication';
 
 export default {
   data() {
@@ -47,7 +47,7 @@ export default {
   },
 
   mounted() {
-    const meetingId = localStorage.getItem(WHOSNEXT_LS_MEETING_ID_KEY);
+    const meetingId = BackgroundPopupCommunicationService.getMeetingId();
 
     database
       .collection('meetings')
