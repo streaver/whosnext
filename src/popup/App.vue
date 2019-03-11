@@ -26,9 +26,8 @@
     </div>
     <div v-else>
       <h1 class="header header--medium">No Meet call in progress yet...</h1>
-      <div class="meet-link centered rounded-border-50">
-        <a class="link--no-decoration" href="https://meet.google.com/" target="_blank">Start Call</a>
-      </div>
+
+      <a class="meet-link centered rounded-border-50 link--no-decoration" href="https://meet.google.com/" target="_blank">Start Call</a>
     </div>
 
     <span class="powered-by">Powered by
@@ -96,7 +95,7 @@ export default {
 
 <style lang="scss" scoped>
 .extension {
-  background-color: #39b54a;
+  background-color: #39B54A;
   background-size: cover;
   background-origin: border-box;
   background-repeat: no-repeat;
@@ -124,7 +123,6 @@ export default {
 
 .header {
   padding-top: 20px;
-  font-family: 'Montserrat';
   font-weight: 400;
   text-align: center;
   color: white;
@@ -143,12 +141,11 @@ export default {
   border: solid 1px #abb1b3;
   height: 20px;
   font-size: 13px;
-  font-family: 'Montserrat';
   font-weight: 300;
 }
 
 .speaker-card--active {
-  border-color: #39b54a;
+  border-color: #39B54A;
   font-size: 14px;
   font-weight: 400;
   margin-bottom: 15px;
@@ -165,18 +162,28 @@ export default {
 }
 
 .meet-link {
-  padding: 10px;
+  background: white;
+  padding: 15px;
   width: 60px;
   height: 60px;
-  line-height: 5;
-  background-color: white;
+  font-size: 14px;
+  line-height: 4.4;
   position: absolute;
   top: 50%;
   left: 50%;
+  color: #39B54A;
   transform: translateY(-50%) translateX(-50%);
+  -webkit-transform-origin: 50% 50%;
+  transition: all .2s ease-in-out;
 
   &:hover {
-    background-color: rgba(255, 248, 237, 0.8);
+    width: 70px;
+    height: 70px;
+    line-height: 5;
+    font-weight: 600;
+    line-height: 4.8;
+    font-size: 15px;
+    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, .2);
   }
 }
 
