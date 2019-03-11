@@ -1,8 +1,10 @@
 <template>
   <div class="extension">
-    <div v-if="callIsInProgress">
-      <h1 class="header header--medium">👩‍💻 Currently on call 👨‍💻</h1>
-      <div class="container rounded-border-10">
+    <div v-if="callIsInProgress" class="particles-bg">
+      <div class="header-container">
+        <h1 class="header header--medium">👩‍💻 Currently on call 👨‍💻</h1>
+      </div>
+      <div class="container rounded-border-3">
         <div id="participants">
           <div
             v-for="participant in participantsHadSpoken"
@@ -13,6 +15,7 @@
           </div>
 
           <span>Next...</span>
+          <span class="splitter--line"></span>
           <div
             v-for="(participant, index) in participantsToSpeak"
             v-bind:key="participant.details.sortKey"
@@ -94,112 +97,130 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.extension {
-  background-color: #39B54A;
-  background-size: cover;
-  background-origin: border-box;
-  background-repeat: no-repeat;
-  min-height: 300px;
-  height: 100%;
-  width: 350px;
-}
-
-.container {
-  background-color: rgba(255, 248, 237, 0.6); /* #FFF8ED */
-  margin: auto;
-  padding: 10px;
-  min-height: 250px;
-  width: 280px;
-  margin-bottom: 30px;
-}
-
-.rounded-border-10 {
-  border-radius: 10px;
-}
-
-.rounded-border-50 {
-  border-radius: 50px;
-}
-
-.header {
-  padding-top: 20px;
-  font-weight: 400;
-  text-align: center;
-  color: white;
-}
-
-.header--medium {
-  font-size: 22px;
-}
-
-.speaker-card {
-  background-color: rgba(255, 248, 237, 0.5);
-  padding: 5px;
-  width: 200px;
-  margin-bottom: 5px;
-  border-radius: 5px;
-  border: solid 1px #abb1b3;
-  height: 20px;
-  font-size: 13px;
-  font-weight: 300;
-}
-
-.speaker-card--active {
-  border-color: #39B54A;
-  font-size: 14px;
-  font-weight: 400;
-  margin-bottom: 15px;
-
-  &::before {
-    content: '>';
+  .extension {
+    background-image: linear-gradient(45deg, rgba(37, 165, 200, .5) 0%, #39B54A 65%); // #25A5c8
+    min-height: 300px;
+    height: 100%;
+    width: 350px;
   }
-}
 
-.speaker-card--spoke {
-  color: gray;
-  border-color: rgba(255, 248, 237, 0.2);
-  background-color: rgba(255, 248, 237, 0.3);
-}
+  .particles-bg {
+    background-image: url('~/popup/images/particles-white.png');
+    background-size: cover;
+  }
 
-.meet-link {
-  background: white;
-  padding: 15px;
-  width: 60px;
-  height: 60px;
-  font-size: 14px;
-  line-height: 4.4;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  color: #39B54A;
-  transform: translateY(-50%) translateX(-50%);
-  -webkit-transform-origin: 50% 50%;
-  transition: all .2s ease-in-out;
+  .container {
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: auto;
+    margin-top: 20px;
+    padding: 10px;
+    min-height: 250px;
+    width: 280px;
+    margin-bottom: 30px;
+  }
 
-  &:hover {
-    width: 70px;
+  .rounded-border-3 {
+    border-radius: 3px;
+  }
+
+  .rounded-border-50 {
+    border-radius: 50px;
+  }
+
+  .header-container {
     height: 70px;
-    line-height: 5;
-    font-weight: 600;
-    line-height: 4.8;
-    font-size: 15px;
-    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, .2);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
   }
-}
 
-.link--no-decoration {
-  text-decoration: none;
-}
+  .header {
+    padding-top: 20px;
+    font-weight: 400;
+    text-align: center;
+    color: white;
+  }
 
-.centered {
-  margin: auto;
-  text-align: center;
-}
+  .header--medium {
+    font-size: 22px;
+  }
 
-.powered-by {
-  font-size: 11px;
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-}
+  .splitter--line {
+    padding: 2px;
+    border-bottom: 1px dotted rgba(0, 0, 0, 0.5);
+    width: 100%;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .speaker-card {
+    background-color: rgba(255, 248, 237, 0.5);
+    padding: 5px;
+    width: 200px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: solid 1px #abb1b3;
+    height: 20px;
+    font-size: 13px;
+    font-weight: 300;
+  }
+
+  .speaker-card--active {
+    border-color: #39B54A;
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 15px;
+
+    &::before {
+      content: '>';
+    }
+  }
+
+  .speaker-card--spoke {
+    color: gray;
+    border-color: rgba(255, 248, 237, 0.2);
+    background-color: rgba(255, 248, 237, 0.3);
+  }
+
+  .meet-link {
+    background: white;
+    padding: 15px;
+    width: 60px;
+    height: 60px;
+    font-size: 14px;
+    line-height: 4.4;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #39B54A;
+    transform: translateY(-50%) translateX(-50%);
+    -webkit-transform-origin: 50% 50%;
+    transition: all .2s ease-in-out;
+
+    &:hover {
+      width: 70px;
+      height: 70px;
+      line-height: 5;
+      font-weight: 600;
+      line-height: 4.8;
+      font-size: 15px;
+      box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, .2);
+    }
+  }
+
+  .link--no-decoration {
+    text-decoration: none;
+  }
+
+  .centered {
+    margin: auto;
+    text-align: center;
+  }
+
+  .powered-by {
+    font-size: 11px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+  }
 </style>
