@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       current: 0,
-      loading: true,
+      loading: null,
       participants: [],
     };
   },
@@ -91,18 +91,26 @@ export default {
   created() {
     const meetingId = BackgroundPopupCommunicationService.getMeetingId();
 
-    this.loading = true;
-    database
-      .collection('meetings')
-      .doc(meetingId)
-      .collection('participants')
-      .onSnapshot(collection => {
-        this.participants = collection.docs.map(participantDoc => participantDoc.data());
+    if (meetingId) {
+      this.loading = true;
 
-        setTimeout(() => {
-          this.loading = false;
-        }, 4000);
-      });
+      database
+        .collection('meetings')
+        .doc(meetingId)
+        .collection('participants')
+        .onSnapshot(collection => {
+          this.participants = collection.docs.map(participantDoc => participantDoc.data());
+
+          // When subscribing always returns the whole result which can be empty if I'm the first participant on call
+          if (this.participants.length > 0) {
+            this.loading = false;
+          } else {
+            setTimeout(() => {
+              this.loading = false;
+            }, 4000);
+          }
+        });
+    }
   },
 };
 </script>
