@@ -21,6 +21,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, _, tab) => {
     if (details) {
       CallTabPersistanceService.save(tab, meetingId, details);
       await RegistrationService.registerUser(tab.url, details);
+
+      chrome.browserAction.setBadgeText({ text: 'LIVE' });
+      chrome.browserAction.setBadgeBackgroundColor({ color: '#39B54A' });
     } else {
       const tabData = CallTabPersistanceService.find(tab.id);
 
@@ -28,6 +31,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, _, tab) => {
         BackgroundPopupCommunicationService.removeMeetingId();
         RegistrationService.unregisterUser(tabData.tabUrl, tabData.userDetails);
         CallTabPersistanceService.remove(tabData.tabId);
+        chrome.browserAction.setBadgeText({ text: '' });
       }
     }
   }
