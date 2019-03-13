@@ -4,7 +4,6 @@
   "version": "0.1.0",
   "manifest_version": 2,
   "icons": {
-    "48": "icons/mic_48.png",
     "128": "icons/mic_128.png"
   },
   "browser_action": {
