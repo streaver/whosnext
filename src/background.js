@@ -46,5 +46,6 @@ browser.tabs.onRemoved.addListener(async tabId => {
     BackgroundPopupCommunicationService.removeMeetingId();
     RegistrationService.unregisterUser(tab.tabUrl, tab.userDetails);
     CallTabPersistanceService.remove(tabId);
+    Popup.clearBadgeStatus();
   }
 });
