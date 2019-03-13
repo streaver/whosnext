@@ -2,6 +2,7 @@ import RegistrationService from './services/registration';
 import CallTabPersistanceService from './services/call-tab-persistance';
 import BackgroundPopupCommunicationService from './services/background-popup-communication';
 import ContentBackgroundCommunicationService from './services/content-background-communication';
+import Popup from './helpers/popup';
 
 const browser = require('webextension-polyfill');
 
@@ -24,8 +25,7 @@ browser.tabs.onUpdated.addListener(async (tabId, _, tab) => {
       CallTabPersistanceService.save(tab, meetingId, details);
       await RegistrationService.registerUser(tab.url, details);
 
-      browser.browserAction.setBadgeText({ text: 'LIVE' });
-      browser.browserAction.setBadgeBackgroundColor({ color: '#39B54A' });
+      Popup.setLive();
     } else {
       const tabData = CallTabPersistanceService.find(tab.id);
 
@@ -33,7 +33,7 @@ browser.tabs.onUpdated.addListener(async (tabId, _, tab) => {
         BackgroundPopupCommunicationService.removeMeetingId();
         RegistrationService.unregisterUser(tabData.tabUrl, tabData.userDetails);
         CallTabPersistanceService.remove(tabData.tabId);
-        browser.browserAction.setBadgeText({ text: '' });
+        Popup.clearBadgeStatus();
       }
     }
   }
