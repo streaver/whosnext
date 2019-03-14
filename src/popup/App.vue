@@ -83,13 +83,14 @@ export default {
   },
 
    filters: {
-    prettifyParticipantName: function (name) {
+    prettifyParticipantName(name) {
       return name.replace(/ spaces.*/, '');
     }
   },
 
   created() {
     const meetingId = BackgroundPopupCommunicationService.getMeetingId();
+    this.myId = BackgroundPopupCommunicationService.getParticipantId();
 
     if (meetingId) {
       this.loading = true;

@@ -1,7 +1,7 @@
 import RegistrationService from './services/registration';
 import CallTabPersistanceService from './services/call-tab-persistance';
 import BackgroundPopupCommunicationService from './services/background-popup-communication';
-import ContentBackgroundCommunicationService from './services/content-background-communication';
+import ContentBackgroundCommunicationService, { actions } from './services/content-background-communication';
 import Popup from './helpers/popup';
 
 const browser = require('webextension-polyfill');
@@ -17,12 +17,13 @@ browser.tabs.onUpdated.addListener(async (tabId, _, tab) => {
 
   if (isCallTab(tab.status, url.host, GOOGLE_MEET_HOST)) {
     const meetingId = url.pathname.replace('/', '');
-    const details = await ContentBackgroundCommunicationService.sendAction(tabId, ContentBackgroundCommunicationService.GET_USER_DETAILS_ACTION_NAME);
+    const details = await ContentBackgroundCommunicationService.sendMessageToTab(actions.GET_USER_DETAILS, tabId);
 
     BackgroundPopupCommunicationService.setMeetingId(meetingId);
 
     if (details) {
       CallTabPersistanceService.save(tab, meetingId, details);
+      BackgroundPopupCommunicationService.setParticipantId(details.participantId);
       await RegistrationService.registerUser(tab.url, details);
 
       Popup.setLive();
@@ -31,8 +32,10 @@ browser.tabs.onUpdated.addListener(async (tabId, _, tab) => {
 
       if (tabData) {
         BackgroundPopupCommunicationService.removeMeetingId();
+        BackgroundPopupCommunicationService.removeParticipantId();
         RegistrationService.unregisterUser(tabData.tabUrl, tabData.userDetails);
         CallTabPersistanceService.remove(tabData.tabId);
+
         Popup.clearBadgeStatus();
       }
     }
