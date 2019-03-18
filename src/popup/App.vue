@@ -30,9 +30,7 @@
       </div>
     </div>
     <div v-else>
-      <h1 class="header header--medium white-color">No Meet call in progress yet...</h1>
-
-      <a class="meet-link centered rounded-border-50 link--no-decoration" href="https://meet.google.com/" target="_blank">Start Call</a>
+      <StartCall></StartCall>
     </div>
 
     <span class="powered-by">Powered by
@@ -46,12 +44,14 @@
 <script>
 import database from '../database/index';
 import Loading from '../components/Loading';
+import StartCall from '../components/StartCall';
 
 import BackgroundPopupCommunicationService from '../services/background-popup-communication';
 
 export default {
   components: {
-    Loading
+    Loading,
+    StartCall
   },
 
   data() {
@@ -145,10 +145,6 @@ export default {
     border-radius: 3px;
   }
 
-  .rounded-border-50 {
-    border-radius: 50px;
-  }
-
   .header-container {
     height: 70px;
     background-color: rgba(255, 255, 255, 0.2);
@@ -201,32 +197,6 @@ export default {
     color: gray;
     border-color: rgba(255, 248, 237, 0.2);
     background-color: rgba(255, 248, 237, 0.3);
-  }
-
-  .meet-link {
-    background: white;
-    padding: 15px;
-    width: 60px;
-    height: 60px;
-    font-size: 14px;
-    line-height: 4.4;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    color: #39B54A;
-    transform: translateY(-50%) translateX(-50%);
-    -webkit-transform-origin: 50% 50%;
-    transition: all .2s ease-in-out;
-
-    &:hover {
-      width: 70px;
-      height: 70px;
-      line-height: 5;
-      font-weight: 600;
-      line-height: 4.8;
-      font-size: 15px;
-      box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, .2);
-    }
   }
 
   .link--no-decoration {
