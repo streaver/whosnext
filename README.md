@@ -1,5 +1,11 @@
-# WhosNext - P2P Web Extension
+# WhosNext - Real time web extension with Vue
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/11605133/54558953-b365d800-499d-11e9-8359-154795087344.png" height="150px">
+  <h2 align="center">Optimizing remote meetings with a real time Vue web extension.<h2>
+</p>
+
+#
 ## Summary & Motivation
 This web extension was thought to make your calls easier, more fluent and
 productive without the overhead of thinking about that.
