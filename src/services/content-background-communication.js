@@ -1,24 +1,53 @@
+/* eslint-disable no-use-before-define */
+
 const browser = require('webextension-polyfill');
 
-const GET_USER_DETAILS_ACTION_NAME = 'GET_USER_DETAILS_ACTION';
-const GET_USER_DETAILS_ACTION = document => {
-  const userElement = document.querySelector('[data-participant-id]');
+const GET_USER_DETAILS = 'GET_USER_DETAILS';
 
-  return userElement ? userElement.dataset : undefined;
-};
+const ACTIONS = [
+  {
+    name: GET_USER_DETAILS,
+    target: 'content',
+    handler: () => {
+      const userElement = document.querySelector('[data-participant-id]');
 
-const CONTENT_ACTIONS = {
-  [GET_USER_DETAILS_ACTION_NAME]: GET_USER_DETAILS_ACTION,
-};
+      return userElement ? userElement.dataset : undefined;
+    },
+  },
+];
 
-async function handleAction(message) {
-  const actionResponse = CONTENT_ACTIONS[message.action](document);
+const BACKGROUND_ACTIONS = ACTIONS.filter(({ target }) => target === 'background');
+const CONTENT_ACTIONS = ACTIONS.filter(({ target }) => target === 'content');
 
-  return actionResponse;
-}
-
-async function sendAction(tabId, action) {
+async function sendMessageToTab(action, tabId) {
   return browser.tabs.sendMessage(tabId, { action }).then(response => response);
 }
 
-export default { handleAction, sendAction, GET_USER_DETAILS_ACTION_NAME };
+async function sendMessageToBackground(action) {
+  return browser.runtime.sendMessage({ action }).then(response => response);
+}
+
+async function messageHandler(actionsList, actionName, sender) {
+  const actionHandler = actionsList.find(({ name }) => name === actionName).handler;
+
+  return actionHandler(sender);
+}
+
+async function handleMessageFromTab(message, sender) {
+  return messageHandler(BACKGROUND_ACTIONS, message.action, sender);
+}
+
+async function handleMessageFromBackground(message, sender) {
+  return messageHandler(CONTENT_ACTIONS, message.action, sender);
+}
+
+export default {
+  sendMessageToTab,
+  sendMessageToBackground,
+  handleMessageFromTab,
+  handleMessageFromBackground,
+};
+
+export const actions = {
+  GET_USER_DETAILS,
+};

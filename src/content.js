@@ -2,4 +2,4 @@ import ContentBackgroundCommunicationService from './services/content-background
 
 const browser = require('webextension-polyfill');
 
-browser.runtime.onMessage.addListener(ContentBackgroundCommunicationService.handleAction);
+browser.runtime.onMessage.addListener(ContentBackgroundCommunicationService.handleMessageFromBackground);
