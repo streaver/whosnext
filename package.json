@@ -19,6 +19,7 @@
     "dotenv-webpack": "^1.7.0",
     "firebase": "^5.8.6",
     "vue": "^2.5.17",
+    "vue-confetti": "^1.1.3",
     "webextension-polyfill": "^0.4.0"
   },
   "devDependencies": {
