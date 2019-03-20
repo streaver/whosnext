@@ -14,8 +14,9 @@
         <h1 class="header header--medium white-color">👩‍💻 Currently on call 👨‍💻</h1>
       </div>
       <div class="container rounded-border-3">
+        <h3>Participants</h3>
+
         <div id="participants">
-          <h3>Participants</h3>
           <Participant
             v-for="participant in participantsSorted"
             v-bind:key="participant.details.sortKey"
@@ -90,7 +91,7 @@ export default {
     },
 
     participantsSorted() {
-      return [].concat(this.speakingParticipant, this.participantsToSpeak, this.participantsThatHadSpoken);
+      return [].concat(this.participantsThatHadSpoken, this.speakingParticipant, this.participantsToSpeak);
     },
 
     isStandupStarted() {
@@ -172,6 +173,10 @@ export default {
 
 .rounded-border-3 {
   border-radius: 3px;
+}
+
+#participants {
+  margin-left: 15px;
 }
 
 .header-container {

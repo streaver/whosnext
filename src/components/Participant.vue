@@ -54,26 +54,27 @@ export default {
 
 <style lang="scss" scoped>
 .participant {
-  background-color: rgba(255, 248, 237, 0.5);
+  background-color: rgba(98, 197, 57, 0.65);
+  background-color: #bfe7c5;
   padding: 5px;
-  width: 200px;
   margin-bottom: 5px;
   border-radius: 5px;
   border: solid 1px #abb1b3;
   height: 20px;
   font-size: 13px;
   font-weight: 300;
-  width: 70%;
+  width: 75%;
   margin-right: 10px;
   display: inline-block;
 }
 
 .participant--is-speaking {
-  border-color: #39b54a;
-  background-color: #bfe7c5;
+  background-color: #e0f3e3;
   font-size: 14px;
   font-weight: 400;
-  margin-bottom: 15px;
+  margin-left: 5px;
+  border: 1px solid #39b54a;
+  box-shadow: 0px 0px 8px 4px #39b54a;
 
   &::before {
     content: '>';
@@ -82,8 +83,8 @@ export default {
 
 .participant--has-spoken {
   color: gray;
-  border-color: rgba(255, 248, 237, 0.2);
-  background-color: rgba(255, 248, 237, 0.3);
+  border-color: rgba(234, 231, 226, 0.2);
+  background-color: rgba(234, 231, 226, 0.3);
 }
 
 .btn-next {
