@@ -63,7 +63,7 @@ export default {
   height: 20px;
   font-size: 13px;
   font-weight: 300;
-  width: 75%;
+  width: 73%;
   margin-right: 10px;
   display: inline-block;
 }
