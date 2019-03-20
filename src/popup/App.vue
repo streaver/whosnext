@@ -3,7 +3,12 @@
     <Loading v-bind:is-loading="isLoading"></Loading>
 
     <div v-if="callIsInProgress" class="particles-bg">
-      <StartStandup v-if="!isStandupStarted" @startStandup="updateNextSpeaker"></StartStandup>
+      <StartStandup
+        v-if="!isStandupStarted && !haveAllParticipantsSpoken"
+        @startStandup="updateNextSpeaker"
+      ></StartStandup>
+
+      <CallEnded v-if="haveAllParticipantsSpoken"></CallEnded>
 
       <div class="header-container">
         <h1 class="header header--medium white-color">👩‍💻 Currently on call 👨‍💻</h1>
@@ -39,6 +44,7 @@ import Loading from '../components/Loading';
 import Participant from '../components/Participant';
 import StartCall from '../components/StartCall';
 import StartStandup from '../components/StartStandup';
+import CallEnded from '../components/CallEnded';
 
 import BackgroundPopupCommunicationService from '../services/background-popup-communication';
 import ParticipantModel from '../database/participant';
@@ -49,6 +55,7 @@ export default {
     Participant,
     StartCall,
     StartStandup,
+    CallEnded,
   },
 
   data() {
@@ -88,6 +95,10 @@ export default {
 
     isStandupStarted() {
       return this.speakingParticipant.length > 0;
+    },
+
+    haveAllParticipantsSpoken() {
+      return this.participantsThatHadSpoken.length === this.participants.length;
     },
   },
 
