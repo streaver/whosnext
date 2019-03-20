@@ -149,7 +149,7 @@ export default {
 
 <style lang="scss" scoped>
 .extension {
-  background-image: linear-gradient(45deg, rgba(37, 165, 200, 0.5) 0%, #39b54a 65%); // #25A5c8
+  background-color: #39b54a;
   min-height: 300px;
   height: 100%;
   width: 350px;
@@ -191,10 +191,21 @@ export default {
 }
 
 .powered-by {
-  font-size: 11px;
+  font-size: 8px;
   position: absolute;
   bottom: 5px;
   right: 5px;
   z-index: 100;
+  color: #006400;
+
+  a {
+    color: #fff;
+    font-size: 11px;
+    text-decoration: none;
+
+    &:hover {
+      color: #7cfc00;
+    }
+  }
 }
 </style>

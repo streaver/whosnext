@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-color">
     <h1 class="header header--medium white-color">No Meet call in progress yet...</h1>
     <a
       class="meet-link white-bg centered rounded-border-50 link--no-decoration"
@@ -10,6 +10,15 @@
 </template>
 
 <style lang="scss" scoped>
+.bg-color {
+  background-image: linear-gradient(45deg, rgba(37, 165, 200, 0.8) 0%, #39b54a 65%);
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
 .header {
   padding-top: 20px;
   font-weight: 400;
