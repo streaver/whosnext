@@ -9,9 +9,10 @@ const participantId = details =>
     .toLowerCase();
 
 export default class Participant {
-  constructor(id, meetingId, { hasSpoken = false, details }) {
+  constructor(id, meetingId, { hasSpoken = false, isSpeaking = false, details }) {
     this.id = id;
     this.hasSpoken = hasSpoken;
+    this.isSpeaking = isSpeaking;
     this.details = details;
     this.ref = database
       .collection('meetings')
@@ -28,12 +29,17 @@ export default class Participant {
       options.merge = true;
     } else {
       data.hasSpoken = this.hasSpoken;
+      data.isSpeaking = this.isSpeaking;
       data.position = position();
     }
 
     await this.ref.set(data, options);
 
     return this;
+  }
+
+  async update(opts) {
+    return this.ref.update(opts);
   }
 
   async delete() {
