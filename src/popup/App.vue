@@ -99,7 +99,7 @@ export default {
         .doc(meetingId)
         .collection('participants')
         .onSnapshot(collection => {
-          this.participants = collection.docs.map(participantDoc => participantDoc.data());
+          this.participants = collection.docs.map(participantDoc => Object.assign(participantDoc.data(), { id: participantDoc.id }));
 
           // When subscribing always returns the whole result which can be empty if I'm the first participant on call
           if (this.participants.length > 0) {

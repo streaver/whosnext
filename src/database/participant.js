@@ -36,6 +36,10 @@ export default class Participant {
     return this;
   }
 
+  async update(opts) {
+    return this.ref.update(opts);
+  }
+
   async delete() {
     return this.ref.delete();
   }

@@ -23,8 +23,9 @@ browser.tabs.onUpdated.addListener(async (tabId, _, tab) => {
 
     if (details) {
       CallTabPersistanceService.save(tab, meetingId, details);
-      BackgroundPopupCommunicationService.setParticipantId(details.participantId);
-      await RegistrationService.registerUser(tab.url, details);
+      const participant = await RegistrationService.registerUser(tab.url, details);
+
+      BackgroundPopupCommunicationService.setParticipantId(participant.id);
 
       Popup.setLive();
     } else {
