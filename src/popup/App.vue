@@ -3,6 +3,8 @@
     <Loading v-bind:is-loading="isLoading"></Loading>
 
     <div v-if="callIsInProgress" class="particles-bg">
+      <StartStandup v-if="!isStandupStarted" @startStandup="updateNextSpeaker"></StartStandup>
+
       <div class="header-container">
         <h1 class="header header--medium white-color">👩‍💻 Currently on call 👨‍💻</h1>
       </div>
@@ -13,6 +15,7 @@
             v-for="participant in participantsSorted"
             v-bind:key="participant.details.sortKey"
             v-bind:participant="participant"
+            @setNextSpeaker="updateNextSpeaker"
           ></Participant>
         </div>
       </div>
@@ -35,14 +38,17 @@ import database from '../database/index';
 import Loading from '../components/Loading';
 import Participant from '../components/Participant';
 import StartCall from '../components/StartCall';
+import StartStandup from '../components/StartStandup';
 
 import BackgroundPopupCommunicationService from '../services/background-popup-communication';
+import ParticipantModel from '../database/participant';
 
 export default {
   components: {
     Loading,
     Participant,
     StartCall,
+    StartStandup,
   },
 
   data() {
@@ -79,11 +85,26 @@ export default {
     participantsSorted() {
       return [].concat(this.speakingParticipant, this.participantsToSpeak, this.participantsThatHadSpoken);
     },
+
+    isStandupStarted() {
+      return this.speakingParticipant.length > 0;
+    },
   },
 
   filters: {
     prettifyParticipantName(name) {
       return name.replace(/ spaces.*/, '');
+    },
+  },
+
+  methods: {
+    updateNextSpeaker() {
+      const meetingId = BackgroundPopupCommunicationService.getMeetingId();
+      const firstParticipant = this.participantsToSpeak[0];
+
+      if (firstParticipant) {
+        new ParticipantModel(firstParticipant.id, meetingId, {}).update({ isSpeaking: true });
+      }
     },
   },
 
@@ -163,5 +184,6 @@ export default {
   position: absolute;
   bottom: 5px;
   right: 5px;
+  z-index: 100;
 }
 </style>

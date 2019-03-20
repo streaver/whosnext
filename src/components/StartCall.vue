@@ -45,6 +45,7 @@
   transform: translateY(-50%) translateX(-50%);
   -webkit-transform-origin: 50% 50%;
   transition: all 0.2s ease-in-out;
+  outline: none;
 
   &:hover {
     width: 70px;

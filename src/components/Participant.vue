@@ -5,7 +5,7 @@
       v-bind:class="{ 'participant--is-speaking': isSpeaking, 'participant--has-spoken': hasSpoken  }"
     >{{ participant.details.sortKey | prettifyParticipantName }}</div>
 
-    <button v-if="amIcurrentSpeaker" v-on:click="setHasSpoken" class="btn-next">Next</button>
+    <button v-if="amIcurrentSpeaker" v-on:click="giveMicNextSpeaker" class="btn-next">Next</button>
   </div>
 </template>
 
@@ -26,7 +26,7 @@ export default {
     },
 
     amIcurrentSpeaker() {
-      return this.participant.id === this.myId;
+      return this.participant.id === this.myId && this.participant.isSpeaking;
     },
   },
 
@@ -41,10 +41,12 @@ export default {
   },
 
   methods: {
-    setHasSpoken() {
+    giveMicNextSpeaker() {
       const meetingId = BackgroundPopupCommunicationService.getMeetingId();
 
-      new Participant(this.myId, meetingId, {}).update({ hasSpoken: true });
+      new Participant(this.myId, meetingId, {}).update({ hasSpoken: true, isSpeaking: false });
+
+      this.$emit('setNextSpeaker');
     },
   },
 };
