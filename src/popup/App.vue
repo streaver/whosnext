@@ -14,8 +14,9 @@
         <h1 class="header header--medium white-color">👩‍💻 Currently on call 👨‍💻</h1>
       </div>
       <div class="container rounded-border-3">
+        <h3>Participants</h3>
+
         <div id="participants">
-          <h3>Participants</h3>
           <Participant
             v-for="participant in participantsSorted"
             v-bind:key="participant.details.sortKey"
@@ -90,7 +91,7 @@ export default {
     },
 
     participantsSorted() {
-      return [].concat(this.speakingParticipant, this.participantsToSpeak, this.participantsThatHadSpoken);
+      return [].concat(this.participantsThatHadSpoken, this.speakingParticipant, this.participantsToSpeak);
     },
 
     isStandupStarted() {
@@ -149,7 +150,7 @@ export default {
 
 <style lang="scss" scoped>
 .extension {
-  background-image: linear-gradient(45deg, rgba(37, 165, 200, 0.5) 0%, #39b54a 65%); // #25A5c8
+  background-color: #39b54a;
   min-height: 300px;
   height: 100%;
   width: 350px;
@@ -174,6 +175,10 @@ export default {
   border-radius: 3px;
 }
 
+#participants {
+  margin-left: 15px;
+}
+
 .header-container {
   height: 70px;
   background-color: rgba(255, 255, 255, 0.2);
@@ -191,10 +196,21 @@ export default {
 }
 
 .powered-by {
-  font-size: 11px;
+  font-size: 8px;
   position: absolute;
   bottom: 5px;
   right: 5px;
   z-index: 100;
+  color: #006400;
+
+  a {
+    color: #fff;
+    font-size: 11px;
+    text-decoration: none;
+
+    &:hover {
+      color: #7cfc00;
+    }
+  }
 }
 </style>

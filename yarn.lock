@@ -6583,6 +6583,11 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-confetti@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/vue-confetti/-/vue-confetti-1.1.3.tgz#4002924679862d6ef1230b2adf55834650c094c6"
+  integrity sha512-6Eu1owTksR2EgkYyhVNKIxW1PZMRP3Rf8upu9rbG2z/Q3SjoOnESmTsk60v3F6KX8WvkNTWLi9vBPGrsApEedg==
+
 vue-eslint-parser@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-5.0.0.tgz#00f4e4da94ec974b821a26ff0ed0f7a78402b8a1"

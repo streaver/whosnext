@@ -1,8 +1,33 @@
 <template>
   <div class="finished-standup-overlay">
-    <span class="congrats-banner">Yay, you're done! Good Job 🎉</span>
+    <span class="congrats-banner">Yay! You're done! Good Job 🎉</span>
   </div>
 </template>
+
+<script>
+import VueConfetti from 'vue-confetti';
+import Vue from 'vue';
+
+Vue.use(VueConfetti);
+
+export default {
+  mounted() {
+    this.startConfetti();
+  },
+
+  methods: {
+    startConfetti () {
+      this.$confetti.start({
+        shape: 'rect'
+      });
+    },
+
+    stopConfetti () {
+      this.$confetti.stop();
+    }
+  },
+}
+</script>
 
 <style lang="scss" scoped>
 .finished-standup-overlay {
