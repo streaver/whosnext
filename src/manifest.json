@@ -1,5 +1,5 @@
 {
-  "name": "whosnext-vue",
+  "name": "whosnext",
   "description": "Who is next at your daily standup?",
   "version": "0.1.0",
   "manifest_version": 2,
@@ -7,7 +7,7 @@
     "128": "icons/mic_128.png"
   },
   "browser_action": {
-    "default_title": "whosnext-vue",
+    "default_title": "whosnext",
     "default_popup": "popup/popup.html"
   },
   "background": {
