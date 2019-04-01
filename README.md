@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/11605133/54558953-b365d800-499d-11e9-8359-154795087344.png" height="150px">
-  <h2 align="center">Optimizing remote meetings with a real time Vue web extension.<h2>
+  <h2 align="center">Optimizing remote meetings with a real time Vue web extension.</h2>
 </p>
 
 <p align="center" style="font-size: 16px;">
@@ -26,7 +26,7 @@ you the next speaker as well as showing who already spoke in case you came a
 few minutes later to the party.
 
 ## How does it work?
-This is an overview of the architecture. Keep an eye
+This is an overview of the architecture. A more detailed version will be published asap.
 
 <img src="https://user-images.githubusercontent.com/11605133/55337706-93421880-5475-11e9-8991-79aa12437843.png">
 
