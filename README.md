@@ -26,9 +26,25 @@ you the next speaker as well as showing who already spoke in case you came a
 few minutes later to the party.
 
 ## How does it work?
+Take a look to the demo video to witness a real scenario and understand how to use it.
+
+<div style="width: 500px; margin-top: 25px; text-align: center;">
+
+  [![Watch the video](https://user-images.githubusercontent.com/11605133/55350912-816f6e00-5493-11e9-9903-bcf1cbe07562.png)](https://youtu.be/lmBxu3J7y7Q)
+</div>
+
 This is an overview of the architecture. A more detailed version will be published asap.
 
 <img src="https://user-images.githubusercontent.com/11605133/55337706-93421880-5475-11e9-8991-79aa12437843.png">
+
+### ⚠️️ Notes
+
+1. Be aware that in order to get the extension running correcly, all participants
+in the meeting must have it installed, otherwise those participants won't be
+taken into account by the extension.
+
+2. Please check out the `.env.example` file to setup your firebase environment.
+
 
 #
 ## Developing & Contributing
