@@ -5,6 +5,12 @@
   <h2 align="center">Optimizing remote meetings with a real time Vue web extension.<h2>
 </p>
 
+<p align="center" style="font-size: 16px;">
+  <strong>Warning:</strong> Hangouts meet's DOM changes often, we can't ensure
+  it'll work as expected 100% of the time, so please create a new issue or open
+   a PR to fix it. 🙏
+<p>
+
 #
 ## Summary & Motivation
 This web extension was thought to make your calls easier, more fluent and
@@ -20,7 +26,9 @@ you the next speaker as well as showing who already spoke in case you came a
 few minutes later to the party.
 
 ## How does it work?
-TBD
+This is an overview of the architecture. Keep an eye
+
+<img src="https://user-images.githubusercontent.com/11605133/55337706-93421880-5475-11e9-8991-79aa12437843.png">
 
 #
 ## Developing & Contributing
