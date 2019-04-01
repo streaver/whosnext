@@ -4,12 +4,18 @@ const browser = require('webextension-polyfill');
 
 const GET_USER_DETAILS = 'GET_USER_DETAILS';
 
+function getUserElement() {
+  const allElements = Array.from(document.querySelectorAll('[data-self-name]')).splice(1);
+
+  return allElements.find(e => e.dataset.selfName === e.innerText).parentElement.parentElement.parentElement;
+}
+
 const ACTIONS = [
   {
     name: GET_USER_DETAILS,
     target: 'content',
     handler: () => {
-      const userElement = document.querySelector('[data-participant-id]');
+      const userElement = getUserElement();
 
       return userElement ? userElement.dataset : undefined;
     },
