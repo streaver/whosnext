@@ -15,7 +15,7 @@
     "watch:dev": "cross-env HMR=true npm run build:dev -- --watch"
   },
   "dependencies": {
-    "@babel/runtime": "^7.3.4",
+    "@babel/runtime": "^7.4.2",
     "dotenv-webpack": "^1.7.0",
     "firebase": "^5.8.6",
     "vue": "^2.5.17",
