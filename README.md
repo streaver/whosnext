@@ -37,11 +37,13 @@ This is an overview of the architecture. A more detailed version will be publish
 
 <img src="https://user-images.githubusercontent.com/11605133/55337706-93421880-5475-11e9-8991-79aa12437843.png">
 
-### ⚠️️ Note
+### ⚠️️ Notes
 
-Be aware that in order to get the extension running correcly, all participants
+1. Be aware that in order to get the extension running correcly, all participants
 in the meeting must have it installed, otherwise those participants won't be
 taken into account by the extension.
+
+2. Please check out the `.env.example` file to setup your firebase environment.
 
 
 #
